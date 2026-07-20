@@ -1,11 +1,34 @@
-Eu estou fazendo o desenvolvimento de um sistema frontend e preciso gerar um script para organizar toda essa estrutura em react, não quero isso tudo em uma page só, separe os components as páginas e deixe tudo de fácil entendimento. Estou criando essa aplicação em react:
-🎨 Identidade Visual & UI (Clean & Professional)Paleta de Cores: Tons de grafite escuro (#1E1E1E), cinza claro para o fundo (#F5F5F7), branco para os cards e detalhes em um dourado fosco ou bronze (#C5A880) para os botões principais, transmitindo profissionalismo.Tipografia: Sem serifa, moderna e minimalista (como Inter ou Roboto).Ícones: Uso exclusivo de SVGs (como a biblioteca Lucide Icons ou Heroicons), sem emojis.📱 Fluxo 1: Visão do Cliente (Foco no Mobile-First)O cliente precisa de agilidade. A interface será dividida em três passos simples na mesma tela:1. Seleção de Serviço e ProfissionalCards simples com o nome do serviço, duração e preço.Exemplo de SVG: Um ícone minimalista de tesoura ou navalha.2. Escolha de Data e HorárioUm calendário compacto (estilo carrossel para mobile) e uma grade (grid) com os horários disponíveis (ex: 09:00, 10:00, 14:00). Horários já ocupados ficam desabilitados.3. Formulário de IdentificaçãoOnde a mágica da sua regra de negócio acontece. O formulário conterá apenas:Nome CompletoCelular (com máscara: (99) 99999-9999)CPF (com máscara: 999.999.999-99)🛑 Regra de Validação no Frontend (Simulação):Ao clicar em "Confirmar Agendamento", o frontend fará uma checagem:JavaScript// Exemplo lógico da validação que faremos no código
-const possuiAgendamentoAtivo = agendamentos.some(
-  (agendamento) => agendamento.cpf === cpfDigitado && agendamento.status === 'pendente'
-);
-if (possuiAgendamentoAtivo) {
-  exibirAlerta("Você já possui um agendamento ativo. Cancele o atual para agendar uma nova data.");
-} else {
-  prosseguirComAgendamento();
-}
-💻 Fluxo 2: Painel do Administrador (Foco em Desktop)O administrador precisa de uma visão macro do dia. A tela será um Dashboard de Agendamentos.1. Controle de StatusO administrador verá a lista de clientes do dia e terá botões de ação rápidos (usando SVGs profissionais):Check verde (✓): Concluir atendimento (libera o CPF do cliente para novos agendamentos).X vermelho (✕): Cancelar agendamento (também libera o CPF).2. Visualização por Grade de HoráriosUma tabela organizada contendo:HorárioClienteCelularCPFStatusAções09:00João Silva(11) 98888-8888123.456.789-00Pendente[Concluir] [Cancelar]10:00Disponível--Livre-11:00Maria Souza(11) 97777-7777987.654.321-11Concluído(Histórico)🛠️ Tecnologias Recomendadas para o FrontendPara que você crie isso de forma rápida, performática e fácil de integrar com o backend no futuro:Framework: React (com Vite) ou Next.js / Vue.js.Estilização: Tailwind CSS (facilita absurdamente a responsividade com classes como md:grid-cols-3 e grid-cols-1).Gerenciamento de Estado Temporário: LocalStorage para você conseguir testar o fluxo de bloqueio de CPF mesmo sem o banco de dados rodando ainda.Qual tecnologia você está planejando usar para buildar esse frontend? Se quiser, posso te ajudar com a estrutura de componentes ou até o código de validação do CPF!
+# Barbearia Fullstack - Frontend
+
+Sistema de agendamento online responsivo e minimalista voltado para barbearias modernas. O projeto conta com uma interface focada na experiência do usuário (mobile-first para clientes) e uma visão analítica em formato de dashboard para a administração da barbearia.
+
+## 🔥 Diferenciais do Projeto
+
+* **Validação de CPF Único:** Um cliente só pode realizar um novo agendamento após o atendimento anterior ter sido concluído ou cancelado.
+* **Sem Gateway de Pagamento:** Fluxo focado estritamente no agendamento; os pagamentos ocorrem externamente.
+* **Design Limpo e Profissional:** Interface baseada em tons de grafite, cinza claro e detalhes bronze/dourado, livre de emojis e estilizada 100% com SVGs.
+* **Arquitetura Escalável:** Código modularizado em componentes para facilitar a futura integração com uma API backend.
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Framework:** React (Vite)
+* **Estilização:** Tailwind CSS (Responsividade Fluida)
+* **Ícones:** Lucide React (Vetores profissionais)
+* **Persistência Temporária:** LocalStorage (Simulação de Regras de Negócio)
+
+## 📁 Estrutura do Projeto
+
+```text
+src/
+├── components/
+│   ├── ClientForm.jsx       # Formulário com máscaras e validação
+│   ├── ScheduleGrid.jsx     # Grade de horários para seleção
+│   ├── ServiceSelection.jsx # Cards de serviços
+│   └── AdminDashboard.jsx   # Painel administrativo
+├── pages/
+│   ├── ClientView.jsx       # View principal do cliente
+│   └── AdminView.jsx        # View principal do admin
+├── context/
+│   └── BookingContext.jsx   # Centralização de estados e regras
+├── App.jsx                  # Roteamento de telas
+└── main.jsx

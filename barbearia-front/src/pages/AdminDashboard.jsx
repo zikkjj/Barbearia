@@ -5,7 +5,20 @@ import { useBooking } from '../context/BookingContext';
 
 export const AdminDashboard = () => {
   const { bookings } = useBooking();
-  const [selectedDate, setSelectedDate] = useState('15/10/2026');
+  
+  const dates = [
+    '19 de julho',
+    '20 de julho',
+    '21 de julho',
+    '22 de julho',
+    '23 de julho',
+    '24 de julho',
+    '25 de julho',
+    '26 de julho',
+    '27 de julho',
+  ];
+  
+  const [selectedDate, setSelectedDate] = useState(dates[2]); // Default 21 de julho
   
   const todayBookings = bookings.filter(b => b.status !== 'cancelado' && b.date === selectedDate);
   const revenue = todayBookings.reduce((acc, curr) => {
@@ -68,10 +81,9 @@ export const AdminDashboard = () => {
             onChange={(e) => setSelectedDate(e.target.value)}
             className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-[var(--color-text-primary)]"
           >
-            <option value="15/10/2026">15/10/2026</option>
-            <option value="16/10/2026">16/10/2026</option>
-            <option value="17/10/2026">17/10/2026</option>
-            <option value="18/10/2026">18/10/2026</option>
+            {dates.map(date => (
+              <option key={date} value={date}>{date}</option>
+            ))}
           </select>
         </div>
 

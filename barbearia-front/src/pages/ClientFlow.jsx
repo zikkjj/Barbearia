@@ -7,10 +7,9 @@ import { Link } from 'react-router-dom';
 import { Scissors } from 'lucide-react';
 
 export const ClientFlow = () => {
-  const { services, professionals, addBooking, bookings } = useBooking();
+  const { services, addBooking, bookings } = useBooking();
   const [bookingData, setBookingData] = useState({
     service: null,
-    professional: null,
     time: null,
     date: '21 de julho' // Default from image
   });
@@ -54,7 +53,6 @@ export const ClientFlow = () => {
   });
 
   const handleServiceSelect = (service) => setBookingData(prev => ({ ...prev, service }));
-  const handleProfessionalSelect = (professional) => setBookingData(prev => ({ ...prev, professional }));
   const handleTimeSelect = (time) => setBookingData(prev => ({ ...prev, time }));
   const handleDateSelect = (date) => setBookingData(prev => ({ ...prev, date, time: null }));
 
@@ -69,7 +67,7 @@ export const ClientFlow = () => {
   };
 
   const handleConfirmBooking = () => {
-    if (!bookingData.service || !bookingData.professional || !bookingData.time || !bookingData.date) {
+    if (!bookingData.service || !bookingData.time || !bookingData.date) {
       alert("Por favor, preencha todos os campos do agendamento antes de confirmar.");
       return;
     }
@@ -79,13 +77,12 @@ export const ClientFlow = () => {
         addBooking({
           ...formData,
           service: bookingData.service,
-          professional: bookingData.professional,
           time: bookingData.time,
           date: bookingData.date
         });
         alert('Agendamento realizado com sucesso!');
         // Reset flow
-        setBookingData({ service: null, professional: null, time: null, date: dates[2].fullDate });
+        setBookingData({ service: null, time: null, date: dates[2].fullDate });
         setFormData({ nome: '', celular: '', cpf: '' });
       } catch (error) {
         alert(error.message);
@@ -117,11 +114,8 @@ export const ClientFlow = () => {
         <div className="flex-1 w-full flex flex-col">
           <ServiceSelection 
             services={services} 
-            professionals={professionals}
             selectedService={bookingData.service} 
-            selectedProfessional={bookingData.professional}
             onSelectService={handleServiceSelect} 
-            onSelectProfessional={handleProfessionalSelect}
           />
           
           <TimeSelection 
@@ -150,10 +144,6 @@ export const ClientFlow = () => {
               <div className="flex justify-between">
                 <span className="text-[var(--color-text-secondary)]">Serviço</span>
                 <span className="font-medium text-[var(--color-text-primary)]">{bookingData.service ? bookingData.service.name : '--'}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--color-text-secondary)]">Profissional</span>
-                <span className="font-medium text-[var(--color-text-primary)]">{bookingData.professional ? bookingData.professional.name : '--'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--color-text-secondary)]">Data</span>

@@ -1,11 +1,11 @@
 export const Card = ({ children, className = '', selectable = false, selected = false, onClick }) => {
-  const baseStyle = "bg-[var(--color-surface)] rounded-xl p-4 shadow-sm border transition-all duration-200";
-  const selectableStyle = selectable ? "cursor-pointer hover:shadow-md" : "";
-  const selectedStyle = selected ? "border-[var(--color-primary)] ring-1 ring-[var(--color-primary)] bg-[#C5A8800A]" : "border-gray-100";
+  const baseStyle = "bg-white rounded-xl p-4 transition-all duration-200";
+  const selectableStyle = selectable ? "cursor-pointer hover:border-gray-300" : "";
+  const borderStyle = selected ? "border-2 border-[var(--color-primary)] ring-0 shadow-sm" : "border border-gray-200 shadow-sm";
 
   return (
     <div 
-      className={`${baseStyle} ${selectableStyle} ${selectedStyle} ${className}`}
+      className={`${baseStyle} ${borderStyle} ${selectableStyle} ${className}`}
       onClick={onClick}
     >
       {children}

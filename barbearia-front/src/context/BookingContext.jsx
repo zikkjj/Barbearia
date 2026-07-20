@@ -3,18 +3,32 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const BookingContext = createContext();
 
 const initialServices = [
-  { id: '1', name: 'Corte Clássico', duration: '30 min', price: 'R$ 40', icon: 'scissors' },
-  { id: '2', name: 'Barba Terapia', duration: '30 min', price: 'R$ 35', icon: 'razor' },
-  { id: '3', name: 'Corte + Barba', duration: '1 hora', price: 'R$ 70', icon: 'combo' },
+  { id: '1', name: 'Corte Masculino', duration: '40 min', price: 'R$ 55.00', icon: 'scissors' },
+  { id: '2', name: 'Barba Completa', duration: '30 min', price: 'R$ 40.00', icon: 'scissors' },
+  { id: '3', name: 'Corte + Barba', duration: '60 min', price: 'R$ 85.00', icon: 'scissors' },
+  { id: '4', name: 'Pigmentação', duration: '45 min', price: 'R$ 70.00', icon: 'scissors' },
+];
+
+const initialProfessionals = [
+  { id: '1', name: 'Rafael', role: 'Barbeiro Sênior' },
+  { id: '2', name: 'Lucas', role: 'Barbeiro' },
+  { id: '3', name: 'André', role: 'Barbeiro' },
 ];
 
 export const BookingProvider = ({ children }) => {
   const [services] = useState(initialServices);
+  const [professionals] = useState(initialProfessionals);
   
   // Load initial bookings from LocalStorage or empty array
   const [bookings, setBookings] = useState(() => {
-    const saved = localStorage.getItem('barbearia_bookings');
-    return saved ? JSON.parse(saved) : [];
+    const saved = localStorage.getItem('bookings');
+    if (!saved) return [];
+    try {
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
   });
 
   // Persist bookings on change
@@ -54,6 +68,7 @@ export const BookingProvider = ({ children }) => {
   return (
     <BookingContext.Provider value={{
       services,
+      professionals,
       bookings,
       addBooking,
       updateBookingStatus,

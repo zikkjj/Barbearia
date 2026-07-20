@@ -1,17 +1,29 @@
 import { useState } from 'react';
 import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
 
-export const IdentificationForm = ({ onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    nome: '',
-    celular: '',
-    cpf: ''
-  });
-  const [errors, setErrors] = useState({});
+export const IdentificationForm = ({ formData, setFormData, errors, setErrors }) => {
+
+  const formatCPF = (val) => {
+    return val.replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
+  };
+
+  const formatCelular = (val) => {
+    return val.replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{4})\d+?$/, '$1');
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    
+    if (name === 'cpf') value = formatCPF(value);
+    if (name === 'celular') value = formatCelular(value);
+
     setFormData(prev => ({ ...prev, [name]: value }));
     // Limpar erro ao digitar
     if (errors[name]) {
@@ -19,33 +31,20 @@ export const IdentificationForm = ({ onSubmit, onCancel }) => {
     }
   };
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.nome.trim()) newErrors.nome = 'Nome é obrigatório';
-    if (!formData.celular || formData.celular.replace(/\D/g, '').length < 11) newErrors.celular = 'Celular inválido';
-    if (!formData.cpf || formData.cpf.replace(/\D/g, '').length < 11) newErrors.cpf = 'CPF inválido';
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      // Pass the unmasked values optionally, or just the string
-      onSubmit(formData);
-    }
-  };
-
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both mt-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-      <h2 className="text-xl font-semibold mb-6 text-[var(--color-text-primary)]">Seus dados</h2>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-8 h-8 rounded-full bg-[var(--color-text-primary)] text-white flex items-center justify-center font-bold text-sm">
+          3
+        </div>
+        <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Seus dados</h2>
+      </div>
       
-      <form onSubmit={handleSubmit}>
+      <div className="flex flex-col gap-4">
         <Input 
-          label="Nome Completo"
+          label="Nome completo"
           name="nome"
-          placeholder="Ex: João da Silva"
+          placeholder="Aaaaa"
           value={formData.nome}
           onChange={handleChange}
           error={errors.nome}
@@ -55,7 +54,7 @@ export const IdentificationForm = ({ onSubmit, onCancel }) => {
           label="Celular"
           name="celular"
           mask="(99) 99999-9999"
-          placeholder="(00) 00000-0000"
+          placeholder="(99) 99999-9999"
           value={formData.celular}
           onChange={handleChange}
           error={errors.celular}
@@ -65,21 +64,12 @@ export const IdentificationForm = ({ onSubmit, onCancel }) => {
           label="CPF"
           name="cpf"
           mask="999.999.999-99"
-          placeholder="000.000.000-00"
+          placeholder="999.999.999-99"
           value={formData.cpf}
           onChange={handleChange}
           error={errors.cpf}
         />
-
-        <div className="flex gap-4 mt-8">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Voltar
-          </Button>
-          <Button type="submit" variant="primary">
-            Confirmar Agendamento
-          </Button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };

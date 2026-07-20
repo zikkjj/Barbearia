@@ -4,13 +4,16 @@ import { useBooking } from '../../context/BookingContext';
 export const ScheduleTable = ({ selectedDate = 'Hoje' }) => {
   const { bookings, updateBookingStatus } = useBooking();
   
-  // Para fins de demonstração, vamos simular horários fixos
-  const hours = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'];
+  // Horários disponíveis
+  const hours = [
+    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+    '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
+    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30'
+  ];
   
   const getBookingForTime = (time) => {
-    // Procura um agendamento (pendente ou concluido) para este horário.
-    // Em um app real usaríamos data e hora. Aqui simplificamos pelo horário.
-    return bookings.find(b => b.time === time);
+    // Procura um agendamento (pendente ou concluido) para este horário E data.
+    return bookings.find(b => b.time === time && b.date === selectedDate);
   };
 
   return (

@@ -22,10 +22,11 @@ export const AdminDashboard = () => {
   
   const todayBookings = bookings.filter(b => b.status !== 'cancelado' && b.date === selectedDate);
   const revenue = todayBookings.reduce((acc, curr) => {
-    // extract numbers from price like 'R$ 40' -> 40
+    // extract numbers from price like 'R$ 55.00' -> 55
     const priceRaw = curr.service?.price;
     const priceStr = priceRaw != null ? String(priceRaw) : '0';
-    const priceNum = parseInt(priceStr.replace(/\D/g, ''), 10) || 0;
+    const cleanStr = priceStr.replace(/[^\d.,]/g, '').replace(',', '.');
+    const priceNum = parseFloat(cleanStr) || 0;
     return acc + priceNum;
   }, 0);
   return (
@@ -70,7 +71,7 @@ export const AdminDashboard = () => {
             </div>
             <div className="bg-white px-4 py-3 rounded-xl border border-gray-100 shadow-sm flex flex-col">
               <span className="text-xs text-[var(--color-text-secondary)] font-medium uppercase">Faturamento (Est.)</span>
-              <span className="text-xl font-bold text-[var(--color-success)]">R$ {revenue}</span>
+              <span className="text-xl font-bold text-[var(--color-success)]">R$ {revenue.toFixed(2)}</span>
             </div>
           </div>
         </header>
